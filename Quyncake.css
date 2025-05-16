@@ -38,17 +38,17 @@ header {
     color: #a46f2a;
     font-weight: bold;
 }
-.section {
+section.section {
     padding: 2rem;
 }
 
-.section h2 {
+section.section h2 {
     text-align: center;
     color: #a46f2a;
     margin-bottom: 1rem;
 }
 
-nav{
+.nav{
     display: flex;
 }
 nav a {
