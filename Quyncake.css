@@ -1,3 +1,8 @@
+html {
+    scroll-behavior: smooth;
+    /* Enables smooth scrolling */
+}
+
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
@@ -38,6 +43,7 @@ header {
     color: #a46f2a;
     font-weight: bold;
 }
+
 section.section {
     padding: 2rem;
 }
@@ -48,9 +54,10 @@ section.section h2 {
     margin-bottom: 1rem;
 }
 
-.nav{
+.nav {
     display: flex;
 }
+
 nav a {
     margin-left: 20px;
     text-decoration: none;
@@ -139,8 +146,8 @@ h3 {
     cursor: pointer;
 }
 
-.product-card button:hover{
-background-color: #fe7777;
+.product-card button:hover {
+    background-color: #fe7777;
 }
 
 footer {
@@ -165,11 +172,12 @@ footer strong {
     align-items: center;
 }
 
-a{
+a {
     display: flex;
     text-decoration: none;
     color: #551A8B
 }
+
 .social-icons {
     justify-content: center;
     gap: 0.5rem;
@@ -189,7 +197,7 @@ p {
     margin: 0;
 }
 
-.cart{
+.cart {
     justify-content: center;
     display: flex;
 }
@@ -350,4 +358,3 @@ button.clear-cart:hover {
     font-weight: 600;
     color: #a46f2a;
 }
-
