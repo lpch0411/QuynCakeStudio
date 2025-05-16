@@ -58,7 +58,7 @@ section.section h2 {
 }
 
 .nav {
-    display: flex;
+    display: flex;  
     margin-right: 2rem;
 }
 
