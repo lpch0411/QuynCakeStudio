@@ -38,7 +38,19 @@ header {
     color: #a46f2a;
     font-weight: bold;
 }
+.section {
+    padding: 2rem;
+}
 
+.section h2 {
+    text-align: center;
+    color: #a46f2a;
+    margin-bottom: 1rem;
+}
+
+nav{
+    display: flex;
+}
 nav a {
     margin-left: 20px;
     text-decoration: none;
