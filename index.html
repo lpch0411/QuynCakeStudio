@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quyn Cake Studio</title>
+  <link rel="stylesheet" href="Quyncake.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header-container>
+    <header>
+      <div class="logo-container">
+        <img src="img/quyncakestudio_logo.jpg" alt="Quyn Cake Studio Logo">
+        <div class="logo-text">Quyn Cake Studio</div>
+      </div>
+      <nav>
+        <a href="#">Shop</a>
+        <a href="#">Contact</a>
+        <a href="#">Cart 🛒</a>
+      </nav>
+    </header>
+  </header-container>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Crafted with Love, Baked with Joy</h1>
+    <button>Shop Now</button>
+  </div>
+
+  <!-- Featured Section -->
+  <section class="section">
+    <h2>Featured Cakes</h2>
+
+    <!-- Bento Cakes -->
+    <h3>Bento Cakes</h3>
+    <div class="products">
+      <div class="product-card">
+        <img src="img/bento/banh1.jpg" alt="Cake 1">
+        <h3>Dưa Lưới Vani</h3>
+        <p>55.000đ</p>
+        <button class="add-to-cart" data-name="dualuoivani" data-price="55000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bento/banh2.jpg" alt="Cake 2">
+        <h3>Chuối Caramel</h3>
+        <p>60.000đ</p>
+        <button class="add-to-cart" data-name="chuoicaramel" data-price="60000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bento/banh3.jpg" alt="Cake 3">
+        <h3>Ô Long Nhãn</h3>
+        <p>55.000đ</p>
+        <button class="add-to-cart" data-name="olongnhan" data-price="55000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bento/banhcaramel.jpg" alt="Cake 4">
+        <h3>Bánh Caramel</h3>
+        <p>55.000đ</p>
+        <button class="add-to-cart" data-name="banhcaramel" data-price="55000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bento/banhgaphomai.jpg" alt="Cake 5">
+        <h3>Bánh Gà Phô Mai</h3>
+        <p>60.000đ</p>
+        <button class="add-to-cart" data-name="banhgaphomai" data-price="55000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bento/bosuachua.jpg" alt="Cake 6">
+        <h3>Bơ Sữa Chua</h3>
+        <p>55.000đ</p>
+        <button class="add-to-cart" data-name="bosuachau" data-price="55000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bento/chocodausuachua.jpg" alt="Cake 7">
+        <h3>Choco Dâu Sữa Chua</h3>
+        <p>55.000đ</p>
+        <button class="add-to-cart" data-name="chocodausuachua" data-price="55000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bento/croissantphomaibotoi.jpg" alt="Cake 8">
+        <h3>Croissant Phô Mai Bơ Tỏi</h3>
+        <p>55.000đ</p>
+        <button class="add-to-cart" data-name="croissantphomaibotoi" data-price="55000">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Birthday Cakes -->
+    <h3>Birthday Cakes</h3>
+    <div class="products">
+      <div class="product-card">
+        <img src="img/bc/bc_caramelchuoi.jpg" alt="BCake 1">
+        <h3>Caramel Chuối</h3>
+        <p>300.000đ</p>
+        <button class="add-to-cart" data-name="Caramel Chuối" data-price="300000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bc/bc_dualuoivani.jpg" alt="BCake 2">
+        <h3>Dưa Lưới Vani</h3>
+        <p>300.000đ</p>
+        <button class="add-to-cart" data-name="Dưa Lưới Vani" data-price="300000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bc/bc_olongcamquyt.jpg" alt="BCake 3">
+        <h3>Ô Long Cam Quýt</h3>
+        <p>300.000đ</p>
+        <button class="add-to-cart" data-name="Ô Long Cam Quýt" data-price="300000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bc/bc_olongcamtra.jpg" alt="BCake 4">
+        <h3>Ô Long Cam Trà</h3>
+        <p>300.000đ</p>
+        <button class="add-to-cart" data-name="Ô Long Cam Trà" data-price="300000">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="img/bc/bc_olongnhainhan.jpg" alt="BCake 5">
+        <h3>Ô Long Nhài Nhãn</h3>
+        <p>300.000đ</p>
+        <button class="add-to-cart" data-name="Ô Long Nhài Nhãn" data-price="300000">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart Section -->
+   <div class="cart">
+    <section class="cart-section" aria-label="Shopping cart">
+      <h3>Your Cart</h3>
+      <ul id="cart-items" aria-live="polite" aria-atomic="true"></ul>
+      <p class="cart-total">Total: <span id="cart-total">0</span>đ</p>
+      <button class="clear-cart" aria-label="Clear shopping cart">Clear Cart</button>
+    </section>
+    </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 <strong>Quyn Cake Studio</strong> by Quynhanhle &middot; est 2021</p>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/quynah.cake/" target="_blank" aria-label="Instagram">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
+        </a>
+        <a href="https://www.facebook.com/jamila.acc?locale=vi_VN" target="_blank" aria-label="Facebook">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook">
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+<script src="Quyncake.js"></script>
+</html>
