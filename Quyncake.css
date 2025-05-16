@@ -161,10 +161,12 @@ footer strong {
     align-items: center;
 }
 
-.social-icons {
-    margin-left: 1rem;
-    margin-top: 10px;
+a{
     display: flex;
+    text-decoration: none;
+    color: #551A8B
+}
+.social-icons {
     justify-content: center;
     gap: 0.5rem;
     filter: invert(37%) sepia(68%) saturate(758%) hue-rotate(9deg) brightness(93%) contrast(94%);
@@ -172,15 +174,11 @@ footer strong {
 }
 
 .social-icons a img {
+    margin-right: 5px;
     width: 24px;
     height: 24px;
     transition: transform 0.3s ease;
     filter: grayscale(100%) brightness(0.4);
-}
-
-.social-icons a:hover img {
-    transform: scale(1.2);
-    filter: none;
 }
 
 p {
@@ -320,3 +318,32 @@ button.clear-cart {
 button.clear-cart:hover {
     background: #a6292d;
 }
+
+.contact-section {
+    padding: 2rem;
+    background-color: #fff0f0;
+    max-width: 400px;
+    margin: 2rem auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(164, 111, 42, 0.2);
+}
+
+.contact-section h2 {
+    text-align: center;
+    color: #a46f2a;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-form label {
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: #a46f2a;
+}
+
