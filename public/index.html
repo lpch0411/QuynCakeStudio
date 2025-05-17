@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quyn Cake Studio</title>
+  <link rel="stylesheet" href="Quyncake.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header-container>
+    <header>
+      <div class="logo-container">
+        <img class="logo-img" src="img/quyncakestudio_logo.jpg" alt="Quyn Cake Studio Logo">
+        <div class="logo-text">Quyn Cake Studio</div>
+      </div>
+      <nav class="nav">
+        <a href="#shop">Shop</a>
+        <a href="#contact">Contact</a>
+        <a href="#cart">Cart</a>
+        <a href="/login.html">Admin</a>
+      </nav>
+    </header>
+  </header-container>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Crafted with Love, Baked with Joy</h1>
+    <button onclick="location.href='#shop'">Shop Now</button>
+  </div>
+
+  <!-- Featured Section -->
+  <section id="shop" class="section">
+    <h2>Featured Cakes</h2>
+    <!-- Bento Cakes -->
+    <h3>Bento Cakes</h3>
+    <div class="products" id="bento-cakes"></div>
+
+    <!-- Birthday Cakes -->
+    <h3>Birthday Cakes</h3>
+    <div class="products" id="birthday-cakes"></div>
+  </section>
+
+  <!-- Cart Section -->
+  <div id="cart" class="cart anchor-fix">
+    <section class="cart-section" aria-label="Shopping cart">
+      <h3>Your Cart</h3>
+      <ul id="cart-items" aria-live="polite" aria-atomic="true"></ul>
+      <p class="cart-total">Total: <span id="cart-total">0</span>đ</p>
+      <button class="clear-cart" aria-label="Clear shopping cart">Clear Cart</button>
+    </section>
+  </div>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact-section" id="contact">
+    <h2>Our Medias</h2>
+    <div class="media-links">
+      <div class="social-icons">
+        <a href="https://www.instagram.com/quynah.cake/" target="_blank" aria-label="Instagram">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
+          quynah.cake</a><br>
+        <a href="https://www.facebook.com/jamila.acc?locale=vi_VN" target="_blank" aria-label="Facebook">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook">
+          Quyn Cake Studio</a><br>
+        <a href="mailto:Quynhanhle051201@gmail.com" target="_blank" aria-label="Email">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Gmail">
+          Quynhanhle051201@gmail.com</a><br>
+        <a href="tel:+84394476268" target="_blank" aria-label="Phone">
+          <img src="img/phone2_icon.png" alt="Phone">039 447 6268</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy;<strong>Quyn Cake Studio</strong> by Quynhanhle &middot; est 2021</p>
+    </div>
+  </footer>
+</body>
+<script src="Quyncake.js"></script>
+
+</html>
