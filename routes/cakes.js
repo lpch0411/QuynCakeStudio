@@ -1,116 +1,94 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/db');
 const multer = require('multer');
 const path = require('path');
+const pool = require('../db/db');
 
 // File upload config (images stored in /public/img)
-const upload = multer({
-    dest: path.join(__dirname, '../public/img') // folder must exist
-});
+const upload = multer({ dest: path.join(__dirname, '../public/img') });
 
-// Create a new cake (with optional image)
-router.post('/', upload.single('image'), (req, res) => {
-    const { name, description, price, category } = req.body;
-    const image = req.file ? `/img/${req.file.filename}` : null;
+// Create a new cake
+router.post('/', upload.single('image'), async (req, res) => {
+  const { name, description, price, category } = req.body;
+  const image = req.file ? `/img/${req.file.filename}` : null;
 
-    console.log('📝 New cake submission:');
-    console.log('Name:', name);
-    console.log('Description:', description);
-    console.log('Price:', price);
-    console.log('Price:', category);
-    console.log('Image file:', req.file ? req.file.filename : 'None');
-
-    db.run(
-        `INSERT INTO cakes (name, description, price, image, category) VALUES (?, ?, ?, ?, ?)`,
-        [name, description, price, image, category],
-        function (err) {
-            if (err) {
-                console.error('❌ DB insert error:', err.message);
-                return res.status(500).json({ error: err.message });
-            }
-            console.log('✅ Cake inserted into DB with ID:', this.lastID);
-            res.status(201).json({ id: this.lastID });
-        }
+  try {
+    const result = await pool.query(
+      `INSERT INTO cakes (name, description, price, image, category) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+      [name, description, price, image, category]
     );
+    res.status(201).json({ id: result.rows[0].id });
+  } catch (err) {
+    console.error('❌ DB insert error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
-
 
 // Get all available cakes
-router.get('/all', (req, res) => {
-    db.all(`SELECT * FROM cakes ORDER BY created_at DESC`, [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
-    });
+router.get('/all', async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT * FROM cakes ORDER BY created_at DESC`);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-//return available cakes
-router.get('/', (req, res) => {
-    const { category } = req.query;
-    let query = `SELECT * FROM cakes WHERE available = 1`;
-    const params = [];
+// Get available cakes by category
+router.get('/', async (req, res) => {
+  const { category } = req.query;
+  let query = `SELECT * FROM cakes WHERE available = 1`;
+  const params = [];
 
-    if (category) {
-        query += ` AND category = ?`;
-        params.push(category);
-    }
+  if (category) {
+    query += ` AND category = $1`;
+    params.push(category);
+  }
 
-    db.all(query, params, (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
-    });
+  try {
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-
-// Update a cake (without changing image)
-router.put('/:id', (req, res) => {
-    const { name, description, price, available, category } = req.body;
-    console.log('🛠 Update request for ID:', req.params.id);
-    console.log('Received:', req.body);
-
-    db.run(
-        `UPDATE cakes SET name = ?, description = ?, price = ?, category = ?, available = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-        [name, description, price, category, available, req.params.id],
-        function (err) {
-            if (err) {
-                console.error('❌ DB update error:', err.message);
-                return res.status(500).json({ error: err.message });
-            }
-            res.json({ message: 'Cake updated' });
-        }
+// Update a cake
+router.put('/:id', async (req, res) => {
+  const { name, description, price, available, category } = req.body;
+  try {
+    await pool.query(
+      `UPDATE cakes SET name = $1, description = $2, price = $3, available = $4, category = $5, updated_at = CURRENT_TIMESTAMP WHERE id = $6`,
+      [name, description, price, available, category, req.params.id]
     );
+    res.json({ message: 'Cake updated' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Toggle availability only
-router.patch('/:id/available', (req, res) => {
-    const { available } = req.body;
-    db.run(
-        `UPDATE cakes SET available = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-        [available, req.params.id],
-        function (err) {
-            if (err) {
-                console.error('❌ Toggle error:', err.message);
-                return res.status(500).json({ error: err.message });
-            }
-            res.json({ message: 'Cake availability updated' });
-        }
+// Toggle availability
+router.patch('/:id/available', async (req, res) => {
+  const { available } = req.body;
+  try {
+    await pool.query(
+      `UPDATE cakes SET available = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2`,
+      [available, req.params.id]
     );
+    res.json({ message: 'Cake availability updated' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-//delete permanently
-router.delete('/:id', (req, res) => {
-    db.run(
-        `DELETE FROM cakes WHERE id = ?`,
-        [req.params.id],
-        function (err) {
-            if (err) {
-                console.error('❌ Delete error:', err.message);
-                return res.status(500).json({ error: err.message });
-            }
-            res.json({ message: 'Cake permanently deleted.' });
-        }
-    );
+// Delete permanently
+router.delete('/:id', async (req, res) => {
+  try {
+    await pool.query(`DELETE FROM cakes WHERE id = $1`, [req.params.id]);
+    res.json({ message: 'Cake permanently deleted.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
-
 
 module.exports = router;
