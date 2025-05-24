@@ -127,47 +127,69 @@ document.querySelectorAll(".add-to-cart").forEach(button => {
     });
 });
 
-const loadCakesToShop = async () => {
-  const fillCategorySection = async (category, containerId) => {
-    try {
-      const res = await fetch(`/api/cakes?category=${encodeURIComponent(category)}`);
-      const cakes = await res.json();
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-
-      if (cakes.length === 0) {
-        container.innerHTML = `<p style="color: #777;">No ${category} available at the moment.</p>`;
-        return;
-      }
-
-      cakes.forEach(cake => {
-        const card = document.createElement("div");
-        card.className = "product-card";
-        card.innerHTML = `
-          <img src="${cake.image || 'img/placeholder.jpg'}" alt="${cake.name}">
-          <h3>${cake.name}</h3>
-          <p class="description">${cake.description}</p>
-          <p class="price" >${Number(cake.price).toLocaleString()}đ</p><br>
-          <button class="add-to-cart" data-name="${cake.name}" data-price="${cake.price}">Add to Cart</button>
-        `;
-        container.appendChild(card);
-      });
-
-      // Re-bind add-to-cart button events
-      container.querySelectorAll(".add-to-cart").forEach(button => {
-        button.addEventListener("click", () => {
-          const name = button.getAttribute("data-name");
-          const price = parseInt(button.getAttribute("data-price"));
-          addToCart(name, price);
-        });
-      });
-    } catch (error) {
-      console.error(`❌ Failed to load ${category}:`, error);
+const showShopMessage = (msg, isError = false) => {
+    let el = document.getElementById("shop-msg");
+    if (!el) {
+        el = document.createElement("div");
+        el.id = "shop-msg";
+        el.style.textAlign = "center";
+        el.style.margin = "12px 0";
+        el.style.color = isError ? "red" : "green";
+        const shopSection = document.getElementById("shop") || document.body;
+        shopSection.parentElement.insertBefore(el, shopSection.nextSibling);
     }
-  };
+    el.style.color = isError ? "red" : "green";
+    el.textContent = msg;
+    setTimeout(() => { el.textContent = ""; }, 4000);
+};
 
-  await fillCategorySection("Bento Cake", "bento-cakes");
-  await fillCategorySection("Birthday Cake", "birthday-cakes");
+const loadCakesToShop = async () => {
+    const fillCategorySection = async (category, containerId) => {
+        try {
+            const res = await fetch(`/api/cakes?category=${encodeURIComponent(category)}`);
+            if (!res.ok) {
+                throw new Error(`Server error: ${res.status}`);
+            }
+            const cakes = await res.json();
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+
+            if (cakes.length === 0) {
+                container.innerHTML = `<p style="color: #777;">No ${category} available at the moment.</p>`;
+                return;
+            }
+
+            cakes.forEach(cake => {
+                const card = document.createElement("div");
+                card.className = "product-card";
+                card.innerHTML = `
+                    <img src="${cake.image || 'img/placeholder.jpg'}" alt="${cake.name}">
+                    <h3>${cake.name}</h3>
+                    <p class="description">${cake.description}</p>
+                    <p class="price" >${Number(cake.price).toLocaleString()}đ</p><br>
+                    <button class="add-to-cart" data-name="${cake.name}" data-price="${cake.price}">Add to Cart</button>
+                `;
+                container.appendChild(card);
+            });
+
+            // Re-bind add-to-cart button events
+            container.querySelectorAll(".add-to-cart").forEach(button => {
+                button.addEventListener("click", () => {
+                    const name = button.getAttribute("data-name");
+                    const price = parseInt(button.getAttribute("data-price"));
+                    addToCart(name, price);
+                });
+            });
+        } catch (error) {
+            console.error(`❌ Failed to load ${category}:`, error);
+            showShopMessage(`Failed to load ${category}. Please try again later.`, true);
+            const container = document.getElementById(containerId);
+            container.innerHTML = `<p style="color: red;">Error loading cakes.</p>`;
+        }
+    };
+
+    await fillCategorySection("Bento Cake", "bento-cakes");
+    await fillCategorySection("Birthday Cake", "birthday-cakes");
 };
 
 // Initialize cart rendering on page load
