@@ -9,13 +9,14 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 /**
  * Create a new cake with optional image upload to GCS.
+ * - Only inserts the cake if the image (if present) uploads successfully.
+ * - If image upload fails, responds with 500 and does NOT insert the cake.
  */
 router.post('/', upload.single('image'), async (req, res) => {
   const { name, description, price, category } = req.body;
   let imageUrl = null;
 
   try {
-    // If image is uploaded, upload to GCS
     if (req.file) {
       const gcsFileName = `${Date.now()}-${req.file.originalname}`;
       const blob = bucket.file(gcsFileName);
@@ -24,12 +25,21 @@ router.post('/', upload.single('image'), async (req, res) => {
         metadata: { contentType: req.file.mimetype },
       });
 
+      let errorHandled = false; // Prevent multiple responses
+
       blobStream.on('error', (err) => {
-        console.error('GCS upload error:', err);
-        return res.status(500).json({ error: 'Image upload failed' });
+        console.error('GCS Upload Error:', err);
+        if (!errorHandled) {
+          errorHandled = true;
+          // Always respond and end the request if upload fails
+          if (!res.headersSent) {
+            res.status(500).json({ error: 'Image upload failed: ' + err.message });
+          }
+        }
       });
 
       blobStream.on('finish', async () => {
+        if (errorHandled) return; // Already handled by error
         imageUrl = `https://storage.googleapis.com/${bucket.name}/${gcsFileName}`;
         try {
           const result = await pool.query(
@@ -39,25 +49,27 @@ router.post('/', upload.single('image'), async (req, res) => {
           res.status(201).json({ id: result.rows[0].id });
         } catch (dbErr) {
           console.error('DB insert error:', dbErr);
-          res.status(500).json({ error: dbErr.message });
+          if (!res.headersSent) {
+            res.status(500).json({ error: 'Database error: ' + dbErr.message });
+          }
         }
       });
 
-      // Start upload
       blobStream.end(req.file.buffer);
 
     } else {
-      // No image: just insert the cake
+      // No image uploaded: normal DB insert
       const result = await pool.query(
         `INSERT INTO cakes (name, description, price, image, category) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
         [name, description, price, null, category]
       );
       res.status(201).json({ id: result.rows[0].id });
     }
-
   } catch (err) {
     console.error('Unexpected error:', err);
-    res.status(500).json({ error: err.message });
+    if (!res.headersSent) {
+      res.status(500).json({ error: err.message });
+    }
   }
 });
 
@@ -69,6 +81,7 @@ router.get('/all', async (req, res) => {
     const result = await pool.query(`SELECT * FROM cakes ORDER BY created_at DESC`);
     res.json(result.rows);
   } catch (err) {
+    console.error('Error fetching cakes:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -90,6 +103,7 @@ router.get('/', async (req, res) => {
     const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (err) {
+    console.error('Error fetching cakes:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -106,6 +120,7 @@ router.put('/:id', async (req, res) => {
     );
     res.json({ message: 'Cake updated' });
   } catch (err) {
+    console.error('Error updating cake:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -122,6 +137,7 @@ router.patch('/:id/available', async (req, res) => {
     );
     res.json({ message: 'Cake availability updated' });
   } catch (err) {
+    console.error('Error toggling cake availability:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -134,6 +150,7 @@ router.delete('/:id', async (req, res) => {
     await pool.query(`DELETE FROM cakes WHERE id = $1`, [req.params.id]);
     res.json({ message: 'Cake permanently deleted.' });
   } catch (err) {
+    console.error('Error deleting cake:', err);
     res.status(500).json({ error: err.message });
   }
 });
