@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quyn Cake Studio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="Quyncake.css">
   <link rel="icon" type="image/png" href="img/quyncakestudio_logo.jpg" />
 </head>
@@ -13,16 +14,21 @@
   <!-- Header -->
   <header-container>
     <header>
+      <div class="topnav"></div>
       <div class="logo-container">
         <img class="logo-img" src="img/quyncakestudio_logo.jpg" alt="Quyn Cake Studio Logo">
         <div class="logo-text">Quyn Cake Studio</div>
       </div>
-      <nav class="nav">
-        <a href="#shop">Shop</a>
-        <a href="#contact">Contact</a>
-        <a href="#cart">Cart</a>
-        <a href="/login.html">Admin</a>
-      </nav>
+        <div id="myLinks" style="display: none;">
+          <a href="#shop" >Shop</a>
+          <a href="#contact" >Contact</a>
+          <a href="#cart" >Cart</a>
+          <a href="/login.html" >Admin</a>
+        </div>
+          <span class="menu" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+          </span>
+      </div>
     </header>
   </header-container>
 
@@ -50,7 +56,8 @@
       <h3>Your Cart</h3>
       <ul id="cart-items" aria-live="polite" aria-atomic="true"></ul>
       <p class="cart-total">Total: <span id="cart-total">0</span>đ</p>
-      <button class="clear-cart" aria-label="Clear shopping cart">Clear Cart</button>
+      <button class="order-now" >Order Now</button>
+      <button class="clear-cart" >Clear Cart</button>
     </section>
   </div>
 
@@ -65,15 +72,24 @@
         <a href="https://www.facebook.com/jamila.acc?locale=vi_VN" target="_blank" aria-label="Facebook">
           <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook">
           Quyn Cake Studio</a><br>
-        <a href="mailto:Quynhanhle051201@gmail.com" target="_blank" aria-label="Email">
+        <a href="mailto:quynhanhle051201@gmail.com" target="_blank" aria-label="Email">
           <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Gmail">
-          Quynhanhle051201@gmail.com</a><br>
+          quynhanhle051201@gmail.com</a><br>
         <a href="tel:+84394476268" target="_blank" aria-label="Phone">
           <img src="img/phone2_icon.png" alt="Phone">039 447 6268</a>
       </div>
     </div>
   </section>
-
+<div id="order-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); justify-content:center; align-items:center; z-index:1000;">
+  <div style="background:white; padding:2rem; border-radius:10px; min-width:260px; text-align:center;">
+    <h3>Enter your phone number</h3>
+    <input id="customer-phone" type="text" placeholder="Phone number" style="margin-bottom:1rem; width:100%; padding:0.5rem;">
+    <br>
+    <button id="submit-order-btn" style="background:#4caf50; color:white; border:none; padding:0.7rem 2rem; border-radius:6px;">Submit Order</button>
+    <button id="cancel-order-btn" style="background:#ccc; color:#333; border:none; padding:0.7rem 2rem; border-radius:6px; margin-left:10px;">Cancel</button>
+    <div id="order-feedback" style="margin-top:1rem;"></div>
+  </div>
+</div>
   <!-- Footer -->
   <footer>
     <div class="footer-content">

@@ -4,6 +4,14 @@
   box-sizing: border-box;
 }
 
+a{
+  text-decoration:none; 
+  color:#a46f2a; 
+  font-weight: bold; 
+  font-family: 'Georgia', cursive;  
+  margin-left: 0.5rem;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -287,10 +295,27 @@ button.clear-cart {
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
+  margin-top: 0.5rem;
 }
 
 button.clear-cart:hover {
   background: #a6292d;
+}
+
+button.order-now{
+background: #4caf50;
+color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.order-now:hover{
+  background: #3e8e41;
 }
 
 /* Prevent fixed header from covering anchor-linked sections */
@@ -391,6 +416,18 @@ footer strong {
     width: 100%;
     max-width: 100%;
   }
+
+  .nav.show {
+    display: flex;
+    animation: fadeIn 0.28s;
+  }
+  .nav a {
+    padding: 14px 28px;
+    color: #a46f2a;
+    font-size: 1.06rem;
+    width: 100%;
+    text-align: left;
+  }
 }
 
 @media (max-width: 480px) {
@@ -417,6 +454,18 @@ footer strong {
   .cart-total {
     font-size: 1.1rem;
   }
+
+  .nav.show {
+    display: flex;
+    animation: fadeIn 0.28s;
+  }
+  .nav a {
+    padding: 14px 28px;
+    color: #a46f2a;
+    font-size: 1.06rem;
+    width: 100%;
+    text-align: left;
+  }
 }
 
 #admin-msg, #shop-msg {
@@ -424,4 +473,19 @@ footer strong {
     padding: 4px 0;
     min-height: 20px;
     transition: color 0.2s;
+}
+
+.menu {
+  display: inline-block;
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 1.6rem;
+  border-radius: 6px;
+  transition: background 0.18s, color 0.18s;
+  color: #a46f2a; /* or your main accent */
+}
+.menu:hover, .menu:focus {
+  background: #f7ded6;   /* soft background on hover */
+  color: #ffffff;        /* change icon/text color on hover */
+  outline: none;
 }

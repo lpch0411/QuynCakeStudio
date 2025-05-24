@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Expose the port your app listens on
-EXPOSE 3000
+EXPOSE 8080
 
 # Start the server
 CMD ["node", "server.js"]

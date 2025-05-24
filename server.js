@@ -3,9 +3,10 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cakeRoutes = require('./routes/cakes');
+const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 8080; // Always default to 8080 for cloud
 
 // Config
 const ADMIN_USER = 'admin';
@@ -75,6 +76,41 @@ app.use((err, req, res, next) => {
   console.error('Unhandled error:', err.stack || err);
   res.status(500).json({ error: 'Internal server error.' });
 });
+
+// // ORDER route (send order via email)
+// app.post('/api/order', async (req, res) => {
+//     const { cart, phone } = req.body;
+//     if (!cart || !phone) return res.status(400).send("Missing cart or phone");
+
+//     // Format order details
+//     let orderText = `New Cake Order\nPhone: ${phone}\n\nCakes:\n`;
+//     Object.entries(cart).forEach(([name, item]) => {
+//         orderText += `- ${name} x${item.quantity} (${item.price.toLocaleString()}đ each)\n`;
+//     });
+//     orderText += `\nTotal: ${Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0).toLocaleString()}đ`;
+
+//     // Set up nodemailer (Gmail example; use your store's email + app password)
+//     let transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//             user: 'chanhung041103@gmail.com',      // <== replace!
+//             pass: 'chanhung2003',              // <== replace with Gmail App Password!
+//         }
+//     });
+
+//     try {
+//         await transporter.sendMail({
+//             from: 'chanhung041103@gmail.com',
+//             to: 'chanhung041103@gmail.com', // send to store email
+//             subject: 'New Cake Order',
+//             text: orderText
+//         });
+//         res.status(200).send("Order sent");
+//     } catch (err) {
+//         console.error("Failed to send email:", err.message);
+//         res.status(500).send("Email send failed");
+//     }
+// });
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);

@@ -80,6 +80,7 @@ router.post('/', upload.single('image'), async (req, res) => {
  * Get all cakes (admin view)
  */
 router.get('/all', async (req, res) => {
+  console.log("🚀 all cakes loaded", new Date().toISOString());
   try {
     const result = await pool.query(`SELECT * FROM cakes ORDER BY created_at DESC`);
     res.json(result.rows);
