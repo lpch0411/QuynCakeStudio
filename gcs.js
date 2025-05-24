@@ -1,7 +1,7 @@
 const { Storage } = require('@google-cloud/storage');
 
 const storage = new Storage({
-  keyFilename: '/gcs-key.json',
+  keyFilename: '/secrets/gcs-key.json', // this must match your --update-secrets path
 });
 
 const bucket = storage.bucket('quyncake-uploads');

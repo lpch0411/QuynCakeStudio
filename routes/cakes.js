@@ -4,6 +4,8 @@ const multer = require('multer');
 const { bucket } = require('../gcs'); // Assumes gcs.js exports: { bucket }
 const pool = require('../db/db');
 
+console.log("🚀 cakes.js loaded", new Date().toISOString());
+
 // Use in-memory storage for uploads (recommended for cloud uploads)
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -13,6 +15,7 @@ const upload = multer({ storage: multer.memoryStorage() });
  * - If image upload fails, responds with 500 and does NOT insert the cake.
  */
 router.post('/', upload.single('image'), async (req, res) => {
+  console.log("POST /api/cakes called at", new Date().toISOString());
   const { name, description, price, category } = req.body;
   let imageUrl = null;
 
