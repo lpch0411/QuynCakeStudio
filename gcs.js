@@ -7,3 +7,4 @@ const storage = new Storage({
 const bucket = storage.bucket('quyncake-uploads');
 
 module.exports = { storage, bucket };
+ 
