@@ -203,7 +203,7 @@ function myFunction() {
 }
 
 // // Show/hide modal
-// const orderNowBtn = document.getElementById("order-now-btn");
+// const orderNowBtn = document.getElementById("order-now");
 // const orderModal = document.getElementById("order-modal");
 // const cancelOrderBtn = document.getElementById("cancel-order-btn");
 // const submitOrderBtn = document.getElementById("submit-order-btn");
@@ -211,7 +211,6 @@ function myFunction() {
 
 // orderNowBtn.onclick = () => {
 //     if (Object.keys(cart).length === 0) {
-//         alert("Your cart is empty.");
 //         return;
 //     }
 //     orderModal.style.display = "flex";

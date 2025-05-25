@@ -2,11 +2,10 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const cakeRoutes = require('./routes/cakes');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = process.env.PORT || 8080; // Always default to 8080 for cloud
+const PORT = 3000; // Always default to 8080 for cloud
 
 // Config
 const ADMIN_USER = 'admin';
