@@ -1,19 +1,19 @@
 # cloudbuild.yaml
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/quyn-cake-studio/quyncakestudio', '.']
+    args: ['build', '-t', 'gcr.io/quyncakestudio/quyncakestudio', '.']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       [
         'run', 'deploy', 'quyncake',
-        '--image', 'gcr.io/quyn-cake-studio/quyncakestudio',
+        '--image', 'gcr.io/quyncakestudio/quyncakestudio',
         '--region', 'asia-southeast1',
         '--platform', 'managed',
         '--allow-unauthenticated',
-        '--add-cloudsql-instances=quyn-cake-studio:asia-southeast1:admin',
+        '--add-cloudsql-instances=quyncakestudio:asia-southeast1:admin',
         '--set-env-vars=DB_SOCKET_PATH=/cloudsql',
         '--port=3000'
       ]
 images:
-  - 'gcr.io/quyn-cake-studio/quyncakestudio'
+  - 'gcr.io/quyncakestudio/quyncakestudio'

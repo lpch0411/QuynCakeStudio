@@ -100,6 +100,7 @@ header {
 h3 {
   color: #a46f2a;
   margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 #bento-cakes,
@@ -395,6 +396,42 @@ a {
   font-family: 'Georgia', cursive;
   margin-right: 1.3rem;
   font-size: 1.2rem;
+}
+
+/* Modal */
+#submit-order-btn{
+  background:#4caf50; 
+  color:white; 
+  border:none; 
+  padding:0.7rem 2rem; 
+  border-radius:6px;
+}
+
+#submit-order-btn:hover{
+  background: #3d8f3d;
+}
+
+#cancel-order-btn{
+  background:#ccc; 
+  color:#333; 
+  border:none; 
+  padding:0.7rem 2rem; 
+  border-radius:6px; 
+  margin-left:10px;
+}
+
+#cancel-order-btn:hover{
+  background:#8c8c8c; 
+}
+
+#order-feedback{
+  margin-top:1rem;
+}
+
+#customer-name,#customer-phone,#customer-email{
+  margin-bottom:1rem; 
+  width:100%; 
+  padding:0.5rem;
 }
 
 /* Responsive Media Queries */

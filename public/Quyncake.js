@@ -224,23 +224,40 @@ cancelOrderBtn.onclick = () => {
 };
 
 submitOrderBtn.onclick = async () => {
+    const name = document.getElementById("customer-name").value.trim();
     const phone = document.getElementById("customer-phone").value.trim();
-    // Validate: must be 10 digits, starts with 0, only numbers
+    const email = document.getElementById("customer-email").value.trim();
+
+    // Basic validation
+    if (!name) {
+        orderFeedback.textContent = "Please enter your name.";
+        orderFeedback.style.color = "red";
+        return;
+    }
     if (!/^0\d{9}$/.test(phone)) {
         orderFeedback.textContent = "Please enter a valid phone number.";
         orderFeedback.style.color = "red";
         return;
     }
-    // Send order
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+        orderFeedback.textContent = "Please enter a valid email address.";
+        orderFeedback.style.color = "red";
+        return;
+    }
+
     try {
         const res = await fetch("/api/order", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 cart,
-                phone
+                name,
+                phone,
+                email
             })
         });
+        // ...rest of your code
+
         if (res.ok) {
             orderFeedback.textContent = "Thank you! Your order was sent. We will contact you soon.";
             orderFeedback.style.color = "green";

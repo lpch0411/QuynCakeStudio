@@ -78,10 +78,10 @@ app.use((err, req, res, next) => {
 });
 
 app.post('/api/order', async (req, res) => {
-  const { cart, phone } = req.body;
-  if (!cart || !phone) return res.status(400).send("Missing cart or phone");
+  const { cart, name, phone, email } = req.body;
+  if (!cart || !name || !phone || !email) return res.status(400).send("Missing information");
 
-  let orderText = `New Cake Order\nPhone: ${phone}\n\nCakes:\n`;
+  let orderText = `New Cake Order\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nCakes:\n`;
   Object.entries(cart).forEach(([name, item]) => {
     orderText += `- ${name} x${item.quantity} (${item.price.toLocaleString()}đ each)\n`;
   });

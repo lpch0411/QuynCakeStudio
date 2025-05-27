@@ -4,7 +4,7 @@ const storage = new Storage({
   keyFilename: '/secrets/gcs-key.json', // this must match your --update-secrets path
 });
 
-const bucket = storage.bucket('quyncake-uploads');
+const bucket = storage.bucket('quyncake-upload');
 
 module.exports = { storage, bucket };
  

@@ -90,12 +90,16 @@
   <!-- Order Modal -->
 <div id="order-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); justify-content:center; align-items:center; z-index:1000;">
   <div style="background:white; padding:2rem; border-radius:10px; min-width:260px; text-align:center;">
-    <h3>Enter your phone number</h3>
-    <input id="customer-phone" type="text" placeholder="Phone number" style="margin-bottom:1rem; width:100%; padding:0.5rem;">
+    <h3>Enter your information</h3>
+    <input id="customer-name" type="text" placeholder="Customer name">
     <br>
-    <button id="submit-order-btn" style="background:#4caf50; color:white; border:none; padding:0.7rem 2rem; border-radius:6px;">Submit Order</button>
-    <button id="cancel-order-btn" style="background:#ccc; color:#333; border:none; padding:0.7rem 2rem; border-radius:6px; margin-left:10px;">Cancel</button>
-    <div id="order-feedback" style="margin-top:1rem;"></div>
+    <input id="customer-phone" type="text" placeholder="Phone number">
+    <br>
+    <input id="customer-email" type="text" placeholder="Email address">
+    <br>
+    <button id="submit-order-btn">Submit Order</button>
+    <button id="cancel-order-btn">Cancel</button>
+    <div id="order-feedback"></div>
   </div>
 </div>
 </body>

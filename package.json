@@ -1,5 +1,5 @@
 {
-  "name": "quyn-cake-studio",
+  "name": "quyncakestudio",
   "version": "1.0.0",
   "description": "Cake CRUD backend using Node.js, Express, SQLite",
   "main": "server.js",
