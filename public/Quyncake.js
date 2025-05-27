@@ -202,61 +202,65 @@ function myFunction() {
   }
 }
 
-// // Show/hide modal
-// const orderNowBtn = document.getElementById("order-now");
-// const orderModal = document.getElementById("order-modal");
-// const cancelOrderBtn = document.getElementById("cancel-order-btn");
-// const submitOrderBtn = document.getElementById("submit-order-btn");
-// const orderFeedback = document.getElementById("order-feedback");
+// Show/hide order modal
+const orderNowBtn = document.querySelector(".order-now");
+const orderModal = document.getElementById("order-modal");
+const cancelOrderBtn = document.getElementById("cancel-order-btn");
+const submitOrderBtn = document.getElementById("submit-order-btn");
+const orderFeedback = document.getElementById("order-feedback");
 
-// orderNowBtn.onclick = () => {
-//     if (Object.keys(cart).length === 0) {
-//         return;
-//     }
-//     orderModal.style.display = "flex";
-//     orderFeedback.textContent = "";
-//     document.getElementById("customer-phone").value = "";
-// };
+orderNowBtn.onclick = () => {
+    if (Object.keys(cart).length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+    orderModal.style.display = "flex";
+    orderFeedback.textContent = "";
+    document.getElementById("customer-phone").value = "";
+};
 
-// cancelOrderBtn.onclick = () => {
-//     orderModal.style.display = "none";
-// };
+cancelOrderBtn.onclick = () => {
+    orderModal.style.display = "none";
+};
 
-// submitOrderBtn.onclick = async () => {
-//     const phone = document.getElementById("customer-phone").value.trim();
-//     if (!phone) {
-//         orderFeedback.textContent = "Please enter your phone number.";
-//         orderFeedback.style.color = "red";
-//         return;
-//     }
-//     // Send order
-//     try {
-//         const res = await fetch("/api/order", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify({
-//                 cart,
-//                 phone
-//             })
-//         });
-//         if (res.ok) {
-//             orderFeedback.textContent = "Thank you! Your order was sent. We will contact you soon.";
-//             orderFeedback.style.color = "green";
-//             cart = {};
-//             saveCart();
-//             renderCart();
-//             setTimeout(() => {
-//                 orderModal.style.display = "none";
-//             }, 1200);
-//         } else {
-//             orderFeedback.textContent = "Failed to send order. Please try again.";
-//             orderFeedback.style.color = "red";
-//         }
-//     } catch {
-//         orderFeedback.textContent = "Network error.";
-//         orderFeedback.style.color = "red";
-//     }
-// };
+submitOrderBtn.onclick = async () => {
+    const phone = document.getElementById("customer-phone").value.trim();
+    // Validate: must be 10 digits, starts with 0, only numbers
+    if (!/^0\d{9}$/.test(phone)) {
+        orderFeedback.textContent = "Please enter a valid phone number.";
+        orderFeedback.style.color = "red";
+        return;
+    }
+    // Send order
+    try {
+        const res = await fetch("/api/order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                cart,
+                phone
+            })
+        });
+        if (res.ok) {
+            orderFeedback.textContent = "Thank you! Your order was sent. We will contact you soon.";
+            orderFeedback.style.color = "green";
+            cart = {};
+            saveCart();
+            renderCart();
+            setTimeout(() => {
+                orderModal.style.display = "none";
+            }, 1200);
+        } else {
+            orderFeedback.textContent = "Failed to send order. Please try again.";
+            orderFeedback.style.color = "red";
+        }
+    } catch {
+        orderFeedback.textContent = "Network error.";
+        orderFeedback.style.color = "red";
+    }
+};
+
+
 // Initialize cart rendering on page load
 loadCart();
 renderCart();
