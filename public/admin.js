@@ -31,36 +31,36 @@ const loadCakes = async () => {
   <td><input value="${cake.description || ''}" /></td>
   <td><input type="number" value="${cake.price}" /></td>
   <td><input value="${cake.category || ''}" /></td>
-  <td>${cake.available == 1 ? "Available" : "Unavailable"}</td>
+  <td>${cake.available == 1 ? "Đang bán" : "Ngừng bán"}</td>
   <td>${new Date(cake.created_at).toLocaleString('vi-VN')}</td>
   <td>${new Date(cake.updated_at).toLocaleString('vi-VN')}</td>
   <td>
-    <button onclick="updateCake(${cake.id}, this)">Save</button>
+    <button onclick="updateCake(${cake.id}, this)">Lưu</button>
     <button onclick="toggleCake(${cake.id}, ${cake.available == 1})">
-      ${cake.available == 1 ? "Disable" : "Enable"}
+      ${cake.available == 1 ? "Vô hiệu" : "Kích hoạt"}
     </button>
-    <button onclick="deleteCake(${cake.id})" style="color:red;">Delete</button>
+    <button onclick="deleteCake(${cake.id})" style="color:red;">Xóa</button>
   </td>
 `;
             tableBody.appendChild(row);
         });
         if (!cakes.length) {
-            tableBody.innerHTML = "<tr><td colspan='9' style='color:#777'>No cakes found.</td></tr>";
+            tableBody.innerHTML = "<tr><td colspan='9' style='color:#777'>Không tìm thấy bánh nào.</td></tr>";
         }
     } catch (err) {
         console.error("Failed to load cakes:", err);
-        tableBody.innerHTML = "<tr><td colspan='9' style='color:red'>Error loading cakes. Try again later.</td></tr>";
+        tableBody.innerHTML = "<tr><td colspan='9' style='color:red'>Lỗi tải bánh. Vui lòng thử lại sau.</td></tr>";
     }
 };
 
 const deleteCake = async (id) => {
-    if (!confirm("Are you sure you want to permanently delete this cake?")) return;
+    if (!confirm("Bạn có chắc muốn xóa vĩnh viễn bánh này?")) return;
     try {
         const res = await fetch(`/api/cakes/${id}`, { method: "DELETE" });
         if (!res.ok) {
             throw new Error(`Failed to delete (status: ${res.status})`);
         }
-        showAdminMessage("Cake deleted.");
+        showAdminMessage("Đã xóa bánh.");
         loadCakes();
     } catch (err) {
         showAdminMessage("Error deleting cake: " + err.message, true);
@@ -87,10 +87,10 @@ const updateCake = async (id, button) => {
             const data = await res.json().catch(() => ({}));
             throw new Error(data.error || `Failed to update (status: ${res.status})`);
         }
-        showAdminMessage("Cake updated.");
+        showAdminMessage("Đã cập nhật bánh.");
         loadCakes();
     } catch (err) {
-        showAdminMessage("Error updating cake: " + err.message, true);
+        showAdminMessage("Lỗi cập nhật bánh: " + err.message, true);
         console.error(err);
     }
 };
@@ -105,10 +105,10 @@ const toggleCake = async (id, isCurrentlyAvailable) => {
         if (!res.ok) {
             throw new Error(`Failed to toggle (status: ${res.status})`);
         }
-        showAdminMessage("Cake status changed.");
+        showAdminMessage("Đã thay đổi trạng thái bánh.");
         loadCakes();
     } catch (err) {
-        showAdminMessage("Error changing status: " + err.message, true);
+        showAdminMessage("Lỗi thay đổi trạng thái: " + err.message, true);
         console.error(err);
     }
 };
@@ -132,11 +132,11 @@ cakeForm.addEventListener("submit", async e => {
             const data = await res.json().catch(() => ({}));
             throw new Error(data.error || `Upload failed (status: ${res.status})`);
         }
-        showAdminMessage("Cake added!");
+        showAdminMessage("Đã thêm bánh!");
         cakeForm.reset();
         loadCakes();
     } catch (err) {
-        showAdminMessage("Error adding cake: " + err.message, true);
+        showAdminMessage("Lỗi thêm bánh: " + err.message, true);
         console.error(err);
     }
 });

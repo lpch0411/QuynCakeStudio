@@ -33,11 +33,6 @@ const calculateTotal = () => {
 // Render cart items on the page
 const renderCart = () => {
     cartItemsEl.innerHTML = "";
-    if (Object.keys(cart).length === 0) {
-        cartItemsEl.innerHTML = '<li style="text-align:center; color:#777;">Your cart is empty</li>';
-        cartTotalEl.textContent = '0';
-        return;
-    }
     for (const [name, { price, quantity }] of Object.entries(cart)) {
         const li = document.createElement("li");
 
@@ -102,13 +97,14 @@ const renderCart = () => {
 
 // Add product to cart or increment quantity
 const addToCart = (name, price) => {
-    if (cart[name]) {
-        cart[name].quantity++;
-    } else {
-        cart[name] = { price: price, quantity: 1 };
-    }
-    saveCart();
-    renderCart();
+  if (cart[name]) {
+    cart[name].quantity++;
+  } else {
+    cart[name] = { price: price, quantity: 1 };
+  }
+  saveCart();
+  renderCart();
+  showToast(`${name} đã được thêm vào giỏ hàng!`);
 };
 
 // Clear entire cart
@@ -144,6 +140,7 @@ const showShopMessage = (msg, isError = false) => {
 };
 
 const loadCakesToShop = async () => {
+    showSpinner();
     const fillCategorySection = async (category, containerId) => {
         try {
             const res = await fetch(`/api/cakes?category=${encodeURIComponent(category)}`);
@@ -167,7 +164,7 @@ const loadCakesToShop = async () => {
                     <h3>${cake.name}</h3>
                     <p class="description">${cake.description}</p>
                     <p class="price" >${Number(cake.price).toLocaleString()}đ</p><br>
-                    <button class="add-to-cart" data-name="${cake.name}" data-price="${cake.price}">Add to Cart</button>
+                    <button class="add-to-cart" data-name="${cake.name}" data-price="${cake.price}">Thêm vào giỏ</button>
                 `;
                 container.appendChild(card);
             });
@@ -186,6 +183,7 @@ const loadCakesToShop = async () => {
             const container = document.getElementById(containerId);
             container.innerHTML = `<p style="color: red;">Error loading cakes.</p>`;
         }
+        hideSpinner();
     };
 
     await fillCategorySection("Bento Cake", "bento-cakes");
@@ -194,12 +192,12 @@ const loadCakesToShop = async () => {
 
 //hamburger menu
 function myFunction() {
-  var x = document.getElementById("myLinks");
-  if (x.style.display === "block") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "block";
-  }
+    var x = document.getElementById("myLinks");
+    if (x.style.display === "block") {
+        x.style.display = "none";
+    } else {
+        x.style.display = "block";
+    }
 }
 
 // Show/hide order modal
@@ -210,10 +208,10 @@ const submitOrderBtn = document.getElementById("submit-order-btn");
 const orderFeedback = document.getElementById("order-feedback");
 
 orderNowBtn.onclick = () => {
-    if (Object.keys(cart).length === 0) {
-        alert("Your cart is empty.");
-        return;
-    }
+if (Object.keys(cart).length === 0) {
+  showToast("Giỏ hàng của bạn đang trống!", true);
+  return;
+}
     orderModal.style.display = "flex";
     orderFeedback.textContent = "";
     document.getElementById("customer-phone").value = "";
@@ -224,59 +222,133 @@ cancelOrderBtn.onclick = () => {
 };
 
 submitOrderBtn.onclick = async () => {
-    const name = document.getElementById("customer-name").value.trim();
-    const phone = document.getElementById("customer-phone").value.trim();
-    const email = document.getElementById("customer-email").value.trim();
+  const name = document.getElementById("customer-name").value.trim();
+  const phone = document.getElementById("customer-phone").value.trim();
+  const email = document.getElementById("customer-email").value.trim();
+  const orderType = document.getElementById("order-type").value;
+  const pickupDatetime = document.getElementById("pickup-datetime").value;
+  const address = document.getElementById("delivery-address").value.trim();
 
-    // Basic validation
-    if (!name) {
-        orderFeedback.textContent = "Please enter your name.";
-        orderFeedback.style.color = "red";
-        return;
-    }
-    if (!/^0\d{9}$/.test(phone)) {
-        orderFeedback.textContent = "Please enter a valid phone number.";
-        orderFeedback.style.color = "red";
-        return;
-    }
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-        orderFeedback.textContent = "Please enter a valid email address.";
-        orderFeedback.style.color = "red";
-        return;
-    }
+  if (new Date(pickupDatetime) < new Date()) {
+    showToast("Vui lòng chọn ngày/giờ.", true);
+    return;
+  }
 
-    try {
-        const res = await fetch("/api/order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                cart,
-                name,
-                phone,
-                email
-            })
-        });
-        // ...rest of your code
+  if (!name || !phone || !email || !pickupDatetime) {
+    showToast("Vui lòng điền đầy đủ thông tin.", true);
+    return;
+  }
+  if (orderType === "delivery" && !address) {
+    showToast("Vui lòng nhập địa chỉ giao hàng.", true);
+    return;
+  }
 
-        if (res.ok) {
-            orderFeedback.textContent = "Thank you! Your order was sent. We will contact you soon.";
-            orderFeedback.style.color = "green";
-            cart = {};
-            saveCart();
-            renderCart();
-            setTimeout(() => {
-                orderModal.style.display = "none";
-            }, 1200);
-        } else {
-            orderFeedback.textContent = "Failed to send order. Please try again.";
-            orderFeedback.style.color = "red";
-        }
-    } catch {
-        orderFeedback.textContent = "Network error.";
-        orderFeedback.style.color = "red";
+  showSpinner();
+  try {
+    const res = await fetch("/api/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cart,
+        name,
+        phone,
+        email,
+        orderType,
+        pickupDatetime,
+        address: orderType === "delivery" ? address : ""
+      })
+    });
+
+    if (res.ok) {
+      showToast("Cảm ơn bạn! Đơn hàng đã được gửi.", false);
+      cart = {};
+      saveCart();
+      renderCart();
+      setTimeout(() => { orderModal.style.display = "none"; }, 1200);
+    } else {
+      showToast("Gửi đơn hàng thất bại. Vui lòng thử lại.", true);
+    }
+  } catch {
+    showToast("Lỗi mạng. Vui lòng kiểm tra kết nối.", true);
+  } finally {
+    hideSpinner();
+  }
+};
+
+// const fillCartBtn = document.getElementById("fill-cart-btn");
+// if (fillCartBtn) {
+//     fillCartBtn.addEventListener("click", () => {
+//         // Fill the cart with mock cakes
+//         cart = {
+//             "Chocolate Dream": { price: 50000, quantity: 2 },
+//             "Vanilla Bliss": { price: 45000, quantity: 1 },
+//             "Strawberry Shortcake": { price: 60000, quantity: 3 }
+//         };
+//         saveCart();
+//         renderCart();
+//         alert("Mock cakes added to your cart for testing!");
+//     });
+// }
+
+const orderTypeInput = document.getElementById("order-type");
+const addressInput = document.getElementById("delivery-address");
+
+orderTypeInput.onchange = () => {
+    if (orderTypeInput.value === "delivery") {
+        addressInput.style.display = "block";
+    } else {
+        addressInput.style.display = "none";
     }
 };
 
+// Set minimum date/time to now for pickup/delivery date
+const pickupDatetimeInput = document.getElementById("pickup-datetime");
+if (pickupDatetimeInput) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    // Format as "YYYY-MM-DDTHH:MM"
+    const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    pickupDatetimeInput.min = minDateTime;
+}
+
+const showSpinner = () => {
+  document.getElementById("loading-spinner").style.display = "flex";
+};
+const hideSpinner = () => {
+  document.getElementById("loading-spinner").style.display = "none";
+};
+
+const showToast = (message, isError = false) => {
+  const toastContainer = document.getElementById("toast-container");
+
+  const toast = document.createElement("div");
+  toast.textContent = message;
+
+  // Style for better visibility
+  toast.style.background = isError ? "#e63946" : "#4caf50";
+  toast.style.color = "white";
+  toast.style.fontSize = "1rem";
+  toast.style.borderRadius = "8px";
+  toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+  toast.style.transition = "opacity 0.3s ease";
+  toast.style.textAlign = "center";
+  toast.style.padding = "0.5rem";
+  toast.style.marginBottom = "0.3rem";
+  toast.style.pointerEvents = "none"; // Ensures no interaction block
+
+  toastContainer.appendChild(toast);
+
+  // Animate fade out, but doesn’t block other interactions
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+};
 
 // Initialize cart rendering on page load
 loadCart();

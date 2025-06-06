@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="Quyncake.css">
   <link rel="icon" type="image/png" href="img/quyncakestudio_logo.jpg" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -19,15 +20,15 @@
         <img class="logo-img" src="img/quyncakestudio_logo.jpg" alt="Quyn Cake Studio Logo">
         <div class="logo-text">Quyn Cake Studio</div>
       </div>
-        <div id="myLinks" style="display: none;">
-          <a href="#shop" >Shop</a>
-          <a href="#contact" >Contact</a>
-          <a href="#cart" >Cart</a>
-          <a href="/login.html" >Admin</a>
-        </div>
-          <span class="menu" onclick="myFunction()">
-    <i class="fa fa-bars" style="height: 1.5rem; width: 1.5rem;"></i>
-          </span>
+      <div id="myLinks" style="display: none;">
+        <a href="#shop">Cửa hàng</a>
+        <a href="#contact">Liên hệ</a>
+        <a href="#cart">Giỏ hàng</a>
+        <a href="/login.html">Admin</a>
+      </div>
+      <span class="menu" onclick="myFunction()">
+        <i class="fa fa-bars" style="height: 1.5rem; width: 1.5rem;"></i>
+      </span>
       </div>
     </header>
   </header-container>
@@ -35,36 +36,39 @@
   <!-- Hero Section -->
   <div class="hero">
     <h1>Crafted with Love, Baked with Joy</h1>
-    <button onclick="location.href='#shop'">Shop Now</button>
+    <button onclick="location.href='#shop'">Mua Ngay</button>
   </div>
 
   <!-- Featured Section -->
   <section id="shop" class="section">
-    <h2>Featured Cakes</h2>
+    <h2>Bánh Nổi Bật</h2>
     <!-- Bento Cakes -->
-    <h3>Bento Cakes</h3>
+    <h3>Bánh Bento</h3>
     <div class="products" id="bento-cakes"></div>
 
     <!-- Birthday Cakes -->
-    <h3>Birthday Cakes</h3>
+    <h3>Bánh Birthday</h3>
     <div class="products" id="birthday-cakes"></div>
   </section>
 
   <!-- Cart Section -->
   <div id="cart" class="cart anchor-fix">
     <section class="cart-section" aria-label="Shopping cart">
-      <h3>Your Cart</h3>
+      <h3>Giỏ hàng của bạn</h3>
       <ul id="cart-items" aria-live="polite" aria-atomic="true"></ul>
-      <p class="cart-total">Total: <span id="cart-total">0</span>đ</p>
-      <button class="order-now" >Order Now</button>
-      <button class="clear-cart" >Clear Cart</button>
+      <p class="cart-total">Tổng cộng: <span id="cart-total">0</span>đ</p>
+      <button class="order-now">Đặt hàng ngay</button>
+      <button class="clear-cart">Xóa giỏ hàng</button>
+      <!-- <button id="fill-cart-btn"
+        style="background: #4caf50; color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 6px; margin: 1rem auto; display: block; cursor: pointer;">Fill
+        Cart with Mock Cakes</button> -->
     </section>
   </div>
 
   <!-- Contact Section -->
   <section id="contact" class="contact-section" id="contact">
-    <h2>Our Medias</h2>
-    <div class="media-links">
+    <h2>Mạng xã hội của chúng tôi</h2>
+    <div class="medias-container">
       <div class="social-icons">
         <a href="https://www.instagram.com/quynah.cake/" target="_blank" aria-label="Instagram">
           <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
@@ -88,20 +92,35 @@
   </footer>
 
   <!-- Order Modal -->
-<div id="order-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); justify-content:center; align-items:center; z-index:1000;">
-  <div style="background:white; padding:2rem; border-radius:10px; min-width:260px; text-align:center;">
-    <h3>Enter your information</h3>
-    <input id="customer-name" type="text" placeholder="Customer name">
-    <br>
-    <input id="customer-phone" type="text" placeholder="Phone number">
-    <br>
-    <input id="customer-email" type="text" placeholder="Email address">
-    <br>
-    <button id="submit-order-btn">Submit Order</button>
-    <button id="cancel-order-btn">Cancel</button>
-    <div id="order-feedback"></div>
+  <div id="order-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:white; padding:2rem; border-radius:10px; min-width:260px; text-align:center;">
+      <h3>Nhập thông tin của bạn</h3>
+      <input id="customer-name" type="text" placeholder="Tên khách hàng"><br>
+      <input id="customer-phone" type="text" placeholder="Số điện thoại"><br>
+      <input id="customer-email" type="text" placeholder="Địa chỉ email">
+
+      <!-- New: Delivery or Pickup -->
+      <select id="order-type">
+        <option value="pickup">Nhận tại cửa hàng</option>
+        <option value="delivery">Giao hàng</option>
+      </select><br>
+
+      <!-- New: Date and Time -->
+      <input id="pickup-datetime" type="datetime-local" placeholder="Ngày & giờ nhận/giao" min="">
+
+      <!-- New: Address (shown only for delivery) -->
+      <input id="delivery-address" type="text" placeholder="Địa chỉ giao hàng" style="display:none;"><br>
+
+      <button id="submit-order-btn">Gửi đơn hàng</button>
+      <button id="cancel-order-btn">Hủy</button>
+      <div id="order-feedback"></div>
+    </div>
   </div>
+  <div id="loading-spinner" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(255,255,255,0.7); justify-content:center; align-items:center; z-index:2000;">
+  <div style="border:6px solid #f3f3f3; border-top:6px solid #4caf50; border-radius:50%; width:50px; height:50px; animation:spin 1s linear infinite;"></div>
 </div>
+<div id="toast-container" ></div>
 </body>
 <script src="Quyncake.js"></script>
 

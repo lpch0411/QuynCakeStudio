@@ -95,7 +95,7 @@ router.get('/all', async (req, res) => {
  */
 router.get('/', async (req, res) => {
   const { category } = req.query;
-  let query = `SELECT * FROM cakes WHERE available = 1`;
+  let query = `SELECT * FROM cakes WHERE available = TRUE`;
   const params = [];
 
   if (category) {

@@ -67,21 +67,25 @@ app.use('/api/cakes', (req, res, next) => {
   }
 }, publicCakeRoutes);
 
-// Fallback for SPA
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err.stack || err);
-  res.status(500).json({ error: 'Internal server error.' });
-});
-
 app.post('/api/order', async (req, res) => {
-  const { cart, name, phone, email } = req.body;
-  if (!cart || !name || !phone || !email) return res.status(400).send("Missing information");
+  const { cart, name, phone, email, orderType, pickupDatetime, address } = req.body;
+  if (!cart || !name || !phone || !email || !pickupDatetime || (orderType === 'delivery' && !address)) {
+    return res.status(400).send("Missing information");
+  }
 
-  let orderText = `New Cake Order\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nCakes:\n`;
+
+  // Format date and time to be human-readable
+  const pickupDateObj = new Date(pickupDatetime);
+  const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const optionsTime = { hour: '2-digit', minute: '2-digit' };
+  const formattedDate = pickupDateObj.toLocaleDateString('en-US', optionsDate);
+  const formattedTime = pickupDateObj.toLocaleTimeString('en-US', optionsTime);
+
+  let orderText = `New Cake Order\nName: ${name}\nPhone: ${phone}\nOrder Type: ${orderType}\nDate & Time: ${formattedDate} ${formattedTime}`;
+  if (orderType === 'delivery') {
+    orderText += `\nDelivery Address: ${address}`;
+  }
+  orderText += `\n\nCakes:\n`;
   Object.entries(cart).forEach(([name, item]) => {
     orderText += `- ${name} x${item.quantity} (${item.price.toLocaleString()}đ each)\n`;
   });
@@ -107,6 +111,16 @@ app.post('/api/order', async (req, res) => {
     console.error("Failed to send email:", err.message);
     res.status(500).send("Email send failed");
   }
+});
+
+// Fallback for SPA
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err.stack || err);
+  res.status(500).json({ error: 'Internal server error.' });
 });
 
 app.listen(PORT, () => {
